@@ -1,5 +1,9 @@
 #include "Slav.h"
 #include <fstream>
+#include <cstdlib>
+#include <iterator>
+#include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -25,5 +29,5 @@ Slav::Slav()
 
 string Slav::description()
 {
-	return string("  ") + _name + " [" + to_string(_id) + "]";
+	return std::string("  ") + _name + " [" + to_string(_id) + "]";
 }
