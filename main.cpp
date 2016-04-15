@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <stdio.h>
+#include <cstdlib>
 
 #include "Slav.h"
 
@@ -42,27 +43,48 @@ void containers(Slav * slavs, int n)
 	vector <Slav *> vectorOfSlavs;
 	set <Slav *> setOfSlavs;
 	map <Slav *, Slav *> mapOfSlavs;
-	
+
 	printf("# Containers\n");
 	REPORT_CONTAINERS;
 	printf("## vector\n");
 
+	vectorOfSlavs.push_back(NULL);
+	for (int i=0; i<n; ++i)
+	{
+		int where=rand () % (vectorOfSlavs.size());
+		vectorOfSlavs.insert(vectorOfSlavs.begin()+ where , (slavs+i));
+	}
+		vectorOfSlavs.pop_back();
 	// Umieść Słowian w losowej kolejności w wektorze.
 
+
+	for(vector<Slav *>::iterator it=vectorOfSlavs.begin(); it!=vectorOfSlavs.end(); ++it)
+		cout << (**it).description() <<endl;
 	// Wykorzystując iterator i funkcję description(), wyświetl wszystkich Słowian w wektorze
 
 	REPORT_CONTAINERS;
 	printf("## set\n");
 
+	for (int i=0; i<n; ++i)
+	{
+		setOfSlavs.insert(vectorOfSlavs.back());
+		vectorOfSlavs.pop_back();
+
+	}
 	// Przenieś wszystkich Słowian z wektoru do zbioru.
-	
+
 	REPORT_CONTAINERS;
 	printf("## map\n");
 
+	for(set<Slav *>::iterator it=setOfSlavs.begin(); it!=setOfSlavs.end(); ++it)
+		mapOfSlavs[*it]=*(++it);
+	setOfSlavs.clear();
 	// Stwórz słownik tworzący pary Słowian, z tych znajdujących się w zbiorze, czyszcząc zbiór
-	
+	for(map<Slav *, Slav *>::iterator it_map=mapOfSlavs.begin(); it_map!=mapOfSlavs.end(); ++it_map)
+		cout<<(*(*it_map).first).description()<<" "<<(it_map->second)->description()<<endl;
+
 	// Wykorzystując iterator, wyświetl wszystkie pary Słowian
-	
+
 	REPORT_CONTAINERS;
 }
 
@@ -75,15 +97,28 @@ void adapters(Slav * slavs, int n)
 	REPORT_ADAPTERS;
 	printf("## queue\n");
 
+	for (int i=0; i<n; ++i)
+		queueOfSlavs.push(slavs+i);
 	// Umieść Słowian w kolejce.
-	
+
 	REPORT_ADAPTERS;
 
 	printf("## stack\n");
+
+	for (int i=0; i<n; ++i)
+	{
+		stackOfSlavs.push(queueOfSlavs.front());
+		queueOfSlavs.pop();
+	}
 	// Przenieś Słowian z kolejki do stosu.
 
 	REPORT_ADAPTERS;
 
+	for (int i=0; i<n; ++i)
+	{
+		cout<<(*(stackOfSlavs.top())).description()<< endl;
+		stackOfSlavs.pop();
+	}
 	// Wyświetl Słowian zdejmowanych ze stosu.
 
 	REPORT_ADAPTERS;
@@ -91,7 +126,7 @@ void adapters(Slav * slavs, int n)
 
 void showMeContainerSizes(vector <Slav *> vector, set <Slav *> set, map <Slav *, Slav*> map)
 {
-	printf("[vector_size = %lu, set_size = %lu, map_size = %lu, existingSlavs = %i]\n",
+	printf("[vector_size = %u, set_size = %u, map_size = %u, existingSlavs = %i]\n",
 		vector.size(),
 		set.size(),
 		map.size(),
@@ -100,7 +135,7 @@ void showMeContainerSizes(vector <Slav *> vector, set <Slav *> set, map <Slav *,
 
 void showMeAdapterSizes(queue <Slav *> queue, stack <Slav *> stack)
 {
-	printf("[queue_size = %lu, stack_size = %lu, existingSlavs = %i]\n",
+	printf("[queue_size = %u, stack_size = %u, existingSlavs = %i]\n",
 		queue.size(),
 		stack.size(),
 		Slav::counter());
